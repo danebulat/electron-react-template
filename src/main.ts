@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -30,7 +30,17 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.whenReady().then(() => {
+  ipcMain.handle('main:getVersionInfo', async (): Promise<string> => {
+    const vnode = process.versions['node'];
+    const velectron= process.versions['electron'];
+    const vchrome = process.versions['chrome'];
+
+    return `Node: ${vnode} - Electron: ${velectron} - Chrome: ${vchrome}`;
+  });
+
+  createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

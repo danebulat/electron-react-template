@@ -1,9 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
 
 function App() {
   const [count, setCount] = useState(0)
+  const [versionInfo, setVersionInfo] = useState<string>('...');
+
+  /// Get version info from main process.
+  useEffect(() => {
+    const getInfo = async () => {
+      const info = await window.myAPI.getVersionInfo();
+      setVersionInfo(info);
+    };
+
+    getInfo();
+  }, []);
 
   return (
     <div className="App">
@@ -27,8 +38,11 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <p style={{ fontSize: '0.9rem' }}>
+        {versionInfo}
+      </p>
     </div>
   )
 }
 
-export default App
+export default App;
