@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import reactLogo from './assets/react.svg';
 import './App.css';
 
 function App() {
   const [count, setCount] = useState(0)
   const [versionInfo, setVersionInfo] = useState<string>('...');
+  const location = useLocation();
 
   /// Get version info from main process.
   useEffect(() => {
@@ -39,7 +41,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
       <p style={{ fontSize: '0.9rem' }}>
-        {versionInfo}
+        Path: {location.pathname} - {versionInfo}
       </p>
     </div>
   )

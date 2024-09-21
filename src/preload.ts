@@ -7,6 +7,9 @@ import { PreloadAPI } from "./types/preload";
 export const API: PreloadAPI = {
   getVersionInfo: async () =>
     await ipcRenderer.invoke('main:getVersionInfo'),
+
+  changeTab: (tabId: number) =>
+    ipcRenderer.send('main:changeTab', tabId),
 }
 
 contextBridge.exposeInMainWorld('myAPI', API);
