@@ -22,11 +22,11 @@ const createWebContentsView = () => {
   const webPreferences = { preload: path.join(__dirname, 'preload.js') };
 
   const view1 = new WebContentsView({ webPreferences });
-  view1.setBounds({ x: 0, y: 0, width: 400, height: 400 });
+  view1.setBounds({ x: 0, y: 100, width: 800, height: 300 });
   loadPage(view1, '');
 
   const view2 = new WebContentsView({ webPreferences });
-  view2.setBounds({ x: 400, y: 0, width: 400, height: 400 });
+  view2.setBounds({ x: 0, y: 0, width: 800, height: 100 });
   loadPage(view2, 'tabs');
 
   win.contentView.addChildView(view1);
@@ -34,8 +34,8 @@ const createWebContentsView = () => {
 
   win.on('resize', () => {
     const { width, height } = win.getBounds();
-    view1.setBounds({ x: 0, y: 0, width: width / 2, height });
-    view2.setBounds({ x: width / 2, y: 0, width: width / 2, height });
+    view1.setBounds({ x: 0, y: 100, width, height: Math.max(height - 100, 0) });
+    view2.setBounds({ x: 0, y: 0, width, height: 100 });
   });
 };
 
