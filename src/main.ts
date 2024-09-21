@@ -6,7 +6,6 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-
 /// Loads the correct route for the view.
 const loadPage = (view: WebContentsView, route: string) => {
   MAIN_WINDOW_VITE_DEV_SERVER_URL
@@ -22,21 +21,23 @@ const createWebContentsView = () => {
   const webPreferences = { preload: path.join(__dirname, 'preload.js') };
 
   const view1 = new WebContentsView({ webPreferences });
-  view1.setBounds({ x: 0, y: 100, width: 800, height: 300 });
+  view1.setBounds({ x: 0, y: 50, width: 800, height: 350 });
   loadPage(view1, '');
 
   const view2 = new WebContentsView({ webPreferences });
-  view2.setBounds({ x: 0, y: 0, width: 800, height: 100 });
+  view2.setBounds({ x: 0, y: 0, width: 800, height: 50 });
   loadPage(view2, 'tabs');
 
   win.contentView.addChildView(view1);
   win.contentView.addChildView(view2);
 
   win.on('resize', () => {
-    const { width, height } = win.getBounds();
-    view1.setBounds({ x: 0, y: 100, width, height: Math.max(height - 100, 0) });
-    view2.setBounds({ x: 0, y: 0, width, height: 100 });
+    const { width, height } = win.getContentBounds();
+    view1.setBounds({ x: 0, y: 50, width, height: Math.max(height - 50, 0) });
+    view2.setBounds({ x: 0, y: 0, width, height: 50 });
   });
+
+  view2.webContents.openDevTools();
 };
 
 /// When ready.
