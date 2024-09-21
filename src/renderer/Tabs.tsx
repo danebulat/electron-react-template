@@ -28,9 +28,12 @@ import { useState } from "react";
 interface TabProps {
 	id: number;
 	label: string;
+	activeId: number | null;
+	clickedId: number | null;
+	setClickedId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const Tab: React.FC<TabProps> = ({ id, label }: TabProps) => {
+const Tab: React.FC<TabProps> = ({ id, label, activeId, clickedId, setClickedId }: TabProps) => {
 	/* Dnd */
 	const {
 		attributes,
@@ -41,18 +44,31 @@ const Tab: React.FC<TabProps> = ({ id, label }: TabProps) => {
 	} = useSortable({ id, transition: { duration: 250, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' }})
 
 	/* Styles */
-	const outerStyle: React.CSSProperties = {
+	const parentStyle: React.CSSProperties = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		backgroundColor: '#333',
-		padding: '0.25rem 1rem',
+		backgroundColor: clickedId === id ? '#202020' : '#333',
+		border: `1px solid ${clickedId === id ? 'rgb(219 11 209)' : '#333' }`,
 		borderRadius: '0.25rem',
+		zIndex: activeId === id ? '20' : '1',
+	};
+
+	const outerStyle: React.CSSProperties = {
+		padding: '0.25rem 1rem',
 		fontSize: '0.8rem',
 	};
 
+	/* Click */
+	const handleClick = () => {
+		console.log(`clicked tab ${id}`);
+		setClickedId(id);
+	};
+
 	return (
-		<div ref={setNodeRef} style={outerStyle} {...attributes} {...listeners}>
-			<span role="button">{label}</span>
+		<div ref={setNodeRef} style={parentStyle} {...attributes} {...listeners}>
+			<div style={outerStyle} onClick={handleClick}>
+				<span role="button">{label}</span>
+			</div>
 		</div>
 	);
 };
@@ -63,13 +79,18 @@ const Tab: React.FC<TabProps> = ({ id, label }: TabProps) => {
 
 export const Tabs: React.FC = () => {
 	const [activeId, setActiveId] = useState<number | null>(null);
+	const [clickedId, setClickedId] = useState<number | null>(null);
 	const [items, setItems] = useState<number[]>(
-		Array.from({ length: 5 }, (_, index) => index + 1)
+		Array.from({ length: 3 }, (_, index) => index + 1)
 	);
 
 	/* Dnd */
 	const sensors = useSensors(
-		useSensor(PointerSensor),
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 4,
+			},
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates,
 		})
@@ -121,7 +142,16 @@ export const Tabs: React.FC = () => {
 					modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
 				>
 					<SortableContext items={items} strategy={horizontalListSortingStrategy}>
-						{items.map((id) => (<Tab key={String(id)} id={id} label={`Tab ${id}`}/> ))}
+						{items.map((id) => (
+							<Tab
+								key={String(id)}
+								id={id}
+								label={`Tab ${id}`}
+								activeId={activeId}
+								setClickedId={setClickedId}
+								clickedId={clickedId}
+							/>
+						))}
 					</SortableContext>
 				</DndContext>
 			</div>
