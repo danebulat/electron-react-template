@@ -17,27 +17,70 @@ const loadPage = (view: WebContentsView, route: string) => {
 
 /// Sets up the main window and child views.
 const createWebContentsView = () => {
-  const win = new BaseWindow({ width: 800, height: 400 });
+  const win = new BaseWindow({ width: 800, height: 400, backgroundColor: '#202020' });
   const webPreferences = { preload: path.join(__dirname, 'preload.js') };
 
+  // View for local app.
   const view1 = new WebContentsView({ webPreferences });
   view1.setBounds({ x: 0, y: 50, width: 800, height: 350 });
   loadPage(view1, '');
 
+  // View for tabs.
   const view2 = new WebContentsView({ webPreferences });
   view2.setBounds({ x: 0, y: 0, width: 800, height: 50 });
   loadPage(view2, 'tabs');
 
+  // View for web pages.
+  const view3 = new WebContentsView({ webPreferences });
+  view3.setBounds({ x: 0, y: 50, width: 800, height: 350 });
+  view3.webContents.loadURL('https://electronjs.org');
+
+  // Add tabs and local app views by default;
   win.contentView.addChildView(view1);
   win.contentView.addChildView(view2);
 
   win.on('resize', () => {
     const { width, height } = win.getContentBounds();
     view1.setBounds({ x: 0, y: 50, width, height: Math.max(height - 50, 0) });
+    view3.setBounds({ x: 0, y: 50, width, height: Math.max(height - 50, 0) });
     view2.setBounds({ x: 0, y: 0, width, height: 50 });
   });
 
-  view2.webContents.openDevTools();
+  const removeViews = () => {
+    for (const child of win.contentView.children) {
+      if (child !== view2) {
+        win.contentView.removeChildView(child);
+      }
+    }
+  };
+
+  // IPC handlers
+  ipcMain.on('main:changeTab', (_, tabId: number) => {
+    removeViews();
+
+    switch (tabId) {
+      case 1: {
+        // Reloads the view and resets state.
+        //loadPage(view1, '');
+
+        win.contentView.addChildView(view1);
+        break;
+      }
+      case 2: {
+        view3.webContents.loadURL('https://electronjs.org');
+        win.contentView.addChildView(view3);
+        break;
+      }
+      case 3: {
+        view3.webContents.loadURL('https://github.com/electron/electron');
+        win.contentView.addChildView(view3);
+        break;
+      }
+    }
+  });
+
+  // Open developer tools.
+  view1.webContents.openDevTools();
 };
 
 /// When ready.

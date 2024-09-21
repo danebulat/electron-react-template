@@ -60,8 +60,10 @@ const Tab: React.FC<TabProps> = ({ id, label, activeId, clickedId, setClickedId 
 
 	/* Click */
 	const handleClick = () => {
-		console.log(`clicked tab ${id}`);
-		setClickedId(id);
+		if (clickedId !== id) {
+			setClickedId(id);
+			window.myAPI.changeTab(id);
+		}
 	};
 
 	return (
