@@ -17,7 +17,7 @@ export default defineConfig({
     ssr: true,
     sourcemap: 'inline',
     target: `chrome${chrome}`,
-    outDir: 'dist',
+    outDir: 'dist/preload',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',
     lib: {
@@ -33,7 +33,7 @@ export default defineConfig({
         },
       ],
     },
-    emptyOutDir: false,
+    emptyOutDir: true,
     reportCompressedSize: false,
   },
 });

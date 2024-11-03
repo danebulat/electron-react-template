@@ -29,7 +29,7 @@ export default defineConfig({
     rollupOptions: {
       input: join(PACKAGE_ROOT, 'index.html'),
     },
-    emptyOutDir: false,
+    emptyOutDir: true,
     reportCompressedSize: false,
   },
   plugins: [

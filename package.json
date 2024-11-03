@@ -3,7 +3,7 @@
   "productName": "react-todo",
   "version": "1.0.0",
   "description": "My Electron application description",
-  "main": "./dist/main.cjs",
+  "main": "./dist/main/main.cjs",
   "type": "module",
   "scripts": {
     "start": "electron-forge start",

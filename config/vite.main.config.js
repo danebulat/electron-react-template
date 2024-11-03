@@ -23,7 +23,7 @@ export default defineConfig({
     ssr: true,
     sourcemap: 'inline',
     target: `node${node}`,
-    outDir: 'dist',
+    outDir: 'dist/main',
     assetsDir: '.',
     minify: process.env.MODE !== 'development',
     lib: {
@@ -35,7 +35,7 @@ export default defineConfig({
         entryFileNames: '[name].cjs',
       },
     },
-    emptyOutDir: false,
+    emptyOutDir: true,
     reportCompressedSize: false,
   },
 });

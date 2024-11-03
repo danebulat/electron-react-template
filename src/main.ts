@@ -12,7 +12,7 @@ const createWindow = async () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.cjs'),
+      preload: path.join(__dirname, '../preload', 'preload.cjs'),
     },
   });
 
@@ -29,7 +29,6 @@ const createWindow = async () => {
   mainWindow.webContents.openDevTools();
 };
 
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -43,8 +42,6 @@ app.whenReady().then(async () => {
 
     return `Node: ${vnode} - Electron: ${velectron} - Chrome: ${vchrome}`;
   });
-
-  ipcMain.handle('main:getString', async (): Promise<string> => 'test');
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
