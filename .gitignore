@@ -1,5 +1,9 @@
 .vscode
 
+.browserslistrc
+.electron-vendors.cache.json
+dist
+
 # Logs
 logs
 *.log
