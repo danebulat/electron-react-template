@@ -15,7 +15,7 @@ export default defineConfig({
   mode: process.env.MODE,
   root: PACKAGE_ROOT,
   envDir: PROJECT_ROOT,
-  base: '',
+  base: './',
   server: {
     fs: {
       strict: true,
@@ -24,7 +24,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     target: `chrome${chrome}`,
-    outDir: 'dist',
+    outDir: 'dist/renderer',
     assetsDir: '.',
     rollupOptions: {
       input: join(PACKAGE_ROOT, 'index.html'),

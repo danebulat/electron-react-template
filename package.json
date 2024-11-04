@@ -3,16 +3,21 @@
   "productName": "react-todo",
   "version": "1.0.0",
   "description": "My Electron application description",
-  "main": "./dist/main/main.cjs",
+  "main": "dist/main/main.cjs",
   "type": "module",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "vendors": "cross-env ELECTRON_RUN_AS_NODE=1 electron scripts/update-electron-vendors.js",
-    "watch": "node scripts/watch.js"
+    "watch": "node scripts/watch.js",
+    "build:renderer": "vite build --config config/vite.renderer.config.js",
+    "build:preload": "vite build --config config/vite.preload.config.js",
+    "build:main": "vite build --config config/vite.main.config.js",
+    "build:all": "concurrently \"yarn run build:renderer\" \"yarn run build:preload\" \"yarn run build:main\"",
+    "package": "cross-env MODE=production yarn run build:all && electron-builder --config scripts/electron-builder.config.mjs"
+  },
+  "engines": {
+    "node": "23.1.0"
   },
   "keywords": [],
   "author": {
@@ -35,6 +40,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "@typescript-eslint/typescript-estree": "^8.12.2",
     "@vitejs/plugin-react": "^4.1.0",
+    "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
     "electron": "^33.0.2",
     "electron-builder": "^25.1.8",

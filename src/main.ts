@@ -20,14 +20,12 @@ const createWindow = async () => {
     },
   });
 
-  // and load the index.html of the app.
-  await mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173/');
-
-  //if (VITE_DEV_SERVER_URL) {
-  //  mainWindow.loadURL(VITE_DEV_SERVER_URL);
-  //} else {
-  //  mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
-  //}
+  // Load the index.html of the app.
+  if (process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
+  } else {
+    mainWindow.loadFile(path.join(app.getAppPath(), `dist/renderer/index.html`));
+  }
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
