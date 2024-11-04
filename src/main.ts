@@ -1,5 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import path from 'path';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 //if (require('electron-squirrel-startup')) {
@@ -17,7 +21,7 @@ const createWindow = async () => {
   });
 
   // and load the index.html of the app.
-  await mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL!);
+  await mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173/');
 
   //if (VITE_DEV_SERVER_URL) {
   //  mainWindow.loadURL(VITE_DEV_SERVER_URL);
