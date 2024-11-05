@@ -9,9 +9,15 @@ const __dirname = dirname(__filename);
 
 /**
  * Export electron-builder config.
+ *
+ * Other fields;
+ * npmRebuild, afterSign, extraResources, afterAllArtifactBuild, asarUnpack
  */
 export default {
   appId: "electron-vite-boilerplate",
+  compression: "normal",
+  productName: "Demo App",
+  asar: true,
   directories: {
     output: 'releases',
     buildResources: "dist/renderer",
@@ -21,10 +27,30 @@ export default {
     "node_modules/**/*",
     "package.json",
   ],
-  linux: {
+  mac: {
+    icon: "assets/icon.icns",
     target: [
-      'deb'
+      {
+        target: "dmg",
+        arch: [
+          "x64",
+        ]
+      },
+      {
+        target: "zip",
+        arch: [
+          "x64",
+        ]
+      }
     ],
+    hardenedRuntime: true,
+    notarize: false,
+    entitlements: "entitlements/extendedInfo.plist",
+  },
+  linux: {
+    icon: "assets/LinuxIcons",
+    category: "Utility",
+    target: "AppImage",
   },
 }
 
@@ -34,6 +60,7 @@ export default {
  * @todo Ammend with mapping workspaces.
  * @todo Use in monorepo setup to exclude files in local packages.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function findFilesThatShouldBeExcluded() {
   const allFilesToExclude = [];
 

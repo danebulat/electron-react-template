@@ -14,7 +14,8 @@
     "build:preload": "vite build --config config/vite.preload.config.js",
     "build:main": "vite build --config config/vite.main.config.js",
     "build:all": "concurrently \"yarn run build:renderer\" \"yarn run build:preload\" \"yarn run build:main\"",
-    "package": "cross-env MODE=production yarn run build:all && electron-builder --config scripts/electron-builder.config.mjs"
+    "package": "cross-env MODE=production yarn run build:all && electron-builder --config scripts/electron-builder.config.mjs",
+    "asar:list": "asar list"
   },
   "engines": {
     "node": "23.1.0"
@@ -33,6 +34,7 @@
     "@electron-forge/maker-zip": "^6.4.2",
     "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
     "@electron-forge/plugin-vite": "^6.4.2",
+    "@electron/asar": "^3.2.15",
     "@types/node": "^22.8.7",
     "@types/react": "^18.2.25",
     "@types/react-dom": "^18.2.11",
